@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (!username) {
       return NextResponse.json(
         { success: false, error: "username query parameter is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -48,14 +48,14 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { success: false, error: "User not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!user.privacySettings?.publicProfile) {
       return NextResponse.json(
         { success: false, error: "This profile is private" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -88,15 +88,15 @@ export async function GET(request: NextRequest) {
         artistId: h.artistId,
         trackId: h.trackId,
         albumId: h.albumId,
-        artistName: h.artist?.name,
-        artistGenres: h.artist?.genres,
-        artistImage: h.artist?.image,
-        trackName: h.track?.name,
-        trackImage: h.track?.image,
-        trackDurationMs: h.track?.durationMs,
-        albumName: h.album?.name,
-        albumImage: h.album?.image,
-        albumReleaseDate: h.album?.releaseDate,
+        artistName: h.artist?.name ?? undefined,
+        artistGenres: h.artist?.genres ?? undefined,
+        artistImage: h.artist?.image ?? undefined,
+        trackName: h.track?.name ?? undefined,
+        trackImage: h.track?.album?.image ?? undefined,
+        trackDurationMs: h.track?.durationMs ?? undefined,
+        albumName: h.album?.name ?? undefined,
+        albumImage: h.album?.image ?? undefined,
+        albumReleaseDate: h.album?.releaseDate?.toISOString() ?? undefined,
       }));
 
       if (privacy.showStats) {
@@ -142,7 +142,7 @@ export async function GET(request: NextRequest) {
     console.error("Share API error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -21,7 +21,7 @@ export async function GET() {
     if (!session?.user?.userId) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -52,15 +52,15 @@ export async function GET() {
       artistId: h.artistId,
       trackId: h.trackId,
       albumId: h.albumId,
-      artistName: h.artist?.name,
-      artistGenres: h.artist?.genres,
-      artistImage: h.artist?.image,
-      trackName: h.track?.name,
-      trackImage: h.track?.image,
-      trackDurationMs: h.track?.durationMs,
-      albumName: h.album?.name,
-      albumImage: h.album?.image,
-      albumReleaseDate: h.album?.releaseDate,
+      artistName: h.artist?.name ?? undefined,
+      artistGenres: h.artist?.genres ?? undefined,
+      artistImage: h.artist?.image ?? undefined,
+      trackName: h.track?.name ?? undefined,
+      trackImage: h.track?.album?.image ?? undefined,
+      trackDurationMs: h.track?.durationMs ?? undefined,
+      albumName: h.album?.name ?? undefined,
+      albumImage: h.album?.image ?? undefined,
+      albumReleaseDate: h.album?.releaseDate?.toISOString() ?? undefined,
     }));
 
     // Compute all stats
@@ -103,7 +103,7 @@ export async function GET() {
     console.error("Export API error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
