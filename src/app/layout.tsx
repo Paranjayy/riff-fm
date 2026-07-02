@@ -14,6 +14,19 @@ export const metadata: Metadata = {
   description:
     "All-in-one media stats platform. Track music, movies, anime, books, games, and more.",
   icons: { icon: "/favicon.ico" },
+  manifest: "/manifest.json",
+  themeColor: "#1DB954",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
+  openGraph: {
+    title: "riff.fm",
+    description:
+      "All-in-one media stats platform. Track music, movies, anime, books, games, and more.",
+    type: "website",
+    url: "https://riff.fm",
+  },
 };
 
 export default function RootLayout({
@@ -23,6 +36,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1DB954" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta property="og:title" content="riff.fm" />
+        <meta
+          property="og:description"
+          content="All-in-one media stats platform. Track music, movies, anime, books, games, and more."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://riff.fm" />
+      </head>
       <body
         className={`${inter.variable} font-sans bg-background min-h-screen`}
       >
