@@ -1,10 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatNumber, formatDuration } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
 import type { StatItem } from "@/types";
 
 interface TopListProps {
@@ -14,123 +12,106 @@ interface TopListProps {
   maxItems?: number;
 }
 
-function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) {
-    return (
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-[10px] font-bold text-black shadow-md shadow-amber-500/30">
-        1
-      </span>
-    );
-  }
-  if (rank === 2) {
-    return (
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gray-300 to-gray-400 text-[10px] font-bold text-gray-900 shadow-md shadow-gray-400/20">
-        2
-      </span>
-    );
-  }
-  if (rank === 3) {
-    return (
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-orange-700 text-[10px] font-bold text-orange-100 shadow-md shadow-orange-600/20">
-        3
-      </span>
-    );
-  }
-  return (
-    <span className="w-6 shrink-0 text-center text-sm font-medium text-gray-500">
-      {rank}
-    </span>
-  );
-}
-
 export function TopList({ title, items, type, maxItems = 5 }: TopListProps) {
   const displayItems = items.slice(0, maxItems);
-  const hasMore = items.length > maxItems;
 
   return (
-    <div className="rounded-xl border border-white/5 bg-gray-900/50 p-4 sm:p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        {hasMore && (
+    <div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-h3 text-foreground">{title}</h3>
+        {items.length > maxItems && (
           <Link
-            href={`/dashboard/${type}`}
-            className="text-sm text-[#1DB954] hover:underline"
+            href={`/dashboard/${type === "artists" ? "top-artists" : type === "tracks" ? "top-songs" : type === "albums" ? "top-albums" : "genres"}`}
+            className="text-[13px] text-primary hover:text-primary/80 transition-colors ease-out"
           >
-            See All
+            See all
           </Link>
         )}
       </div>
 
-      <div className="space-y-1">
-        {displayItems.map((item) => (
+      {/* List */}
+      <div className="divide-y divide-border">
+        {displayItems.map((item, index) => (
           <div
             key={item.id}
-            className="group/item flex items-center gap-3 rounded-lg px-2 py-2.5 transition-all duration-200 hover:bg-white/[0.04]"
+            className={cn(
+              "group flex items-center gap-3 sm:gap-4 h-12 px-2 -mx-2 rounded-lg hover:bg-secondary transition-colors ease-out",
+            )}
           >
             {/* Rank */}
-            <RankBadge rank={item.rank} />
+            <span
+              className={cn(
+                "w-5 text-right text-[13px] tabular-nums shrink-0",
+                item.rank <= 3
+                  ? "font-semibold text-foreground/70"
+                  : "text-muted-foreground",
+              )}
+            >
+              {item.rank}
+            </span>
 
             {/* Image */}
-            {type === "genres" ? (
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#1DB954]/30 to-emerald-600/30 text-xs font-bold text-[#1DB954]">
+            <Avatar
+              className={cn(
+                "w-8 h-8 shrink-0",
+                type === "artists" ? "rounded-full" : "rounded-md",
+              )}
+            >
+              <AvatarImage src={item.image} alt={item.name} />
+              <AvatarFallback className="bg-muted text-[10px] text-muted-foreground">
                 {item.name.slice(0, 2).toUpperCase()}
-              </div>
-            ) : (
-              <Avatar
-                className={cn(
-                  "h-10 w-10 shrink-0 ring-2 ring-transparent group-hover/item:ring-white/10 transition-all duration-200",
-                  type === "artists" && "rounded-full",
-                  (type === "tracks" || type === "albums") && "rounded-md",
-                )}
-              >
-                <AvatarImage src={item.image} alt={item.name} />
-                <AvatarFallback className="bg-gray-800 text-xs">
-                  {item.name.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            )}
+              </AvatarFallback>
+            </Avatar>
 
-            {/* Info */}
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium group-hover/item:text-white transition-colors">
+            {/* Name + subtitle */}
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-medium text-foreground truncate">
                 {item.name}
               </p>
               {item.subtitle && (
-                <p className="truncate text-xs text-gray-400">
+                <p className="text-[12px] text-muted-foreground truncate">
                   {item.subtitle}
                 </p>
               )}
             </div>
 
-            {/* Play count & duration */}
-            <div className="hidden shrink-0 text-right sm:block">
-              <p className="text-sm font-medium tabular-nums">
+            {/* Stats — hidden on mobile */}
+            <div className="hidden sm:flex items-center gap-5 shrink-0">
+              <span className="text-[13px] font-medium text-foreground/60 tabular-nums w-16 text-right">
                 {formatNumber(item.playCount)}
-              </p>
-              <p className="text-xs text-gray-400">
+              </span>
+              <span className="text-[12px] text-muted-foreground tabular-nums w-12 text-right">
                 {formatDuration(item.totalMs)}
-              </p>
+              </span>
             </div>
 
-            {/* Progress bar */}
-            <div className="hidden w-24 shrink-0 lg:block">
-              <Progress value={item.percentage} className="h-1.5" />
-            </div>
-
-            {/* Spotify link */}
+            {/* Spotify link — appears on hover */}
             {item.spotifyUrl && (
               <a
                 href={item.spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 text-gray-600 opacity-0 group-hover/item:opacity-100 transition-all duration-200 hover:text-[#1DB954]"
+                className="shrink-0 text-muted-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity ease-out hover:text-primary"
                 title="Listen on Spotify"
               >
-                <ExternalLink className="h-4 w-4" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                </svg>
               </a>
             )}
           </div>
         ))}
+
+        {displayItems.length === 0 && (
+          <p className="text-[13px] text-muted-foreground py-8">
+            No data yet. Import your Spotify history to see your top {type}.
+          </p>
+        )}
       </div>
     </div>
   );

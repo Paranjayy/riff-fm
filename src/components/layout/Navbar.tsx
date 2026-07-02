@@ -3,9 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Music, Compass, Settings, LogOut, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import { LogOut, Settings, User } from "lucide-react";
 
 interface NavbarProps {
   user?: {
@@ -23,8 +23,8 @@ interface NavbarProps {
 }
 
 const navLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: Music },
-  { href: "/explore", label: "Explore", icon: Compass },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/explore", label: "Explore" },
 ];
 
 export function Navbar({ user }: NavbarProps) {
@@ -32,130 +32,185 @@ export function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-gray-950/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Music className="h-6 w-6 text-[#1DB954]" />
-          <span className="bg-gradient-to-r from-[#1DB954] to-emerald-300 bg-clip-text text-xl font-bold text-transparent">
-            riff.fm
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                pathname === href
-                  ? "bg-white/10 text-white"
-                  : "text-gray-400 hover:bg-white/5 hover:text-white"
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Right side */}
-        <div className="flex items-center gap-3">
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={user.image} alt={user.name} />
-                    <AvatarFallback className="bg-gradient-to-br from-[#1DB954] to-emerald-600 text-sm font-semibold text-black">
-                      {user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase()
-                        .slice(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <div className="flex items-center gap-2 p-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.image} alt={user.name} />
-                    <AvatarFallback className="bg-gradient-to-br from-[#1DB954] to-emerald-600 text-xs font-semibold text-black">
-                      {user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase()
-                        .slice(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="text-sm font-medium">{user.name}</p>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center gap-2">
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="flex items-center gap-2 text-red-400 focus:text-red-400">
-                  <LogOut className="h-4 w-4" />
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button asChild size="sm">
-              <Link href="/auth/signin">Sign In</Link>
-            </Button>
-          )}
-
-          {/* Mobile menu toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-[hsl(var(--border-subtle))] bg-[hsl(var(--bg-base)/0.85)] backdrop-blur-xl backdrop-saturate-150">
+        <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6 sm:px-8 lg:px-12">
+          {/* Logo — just text, no gradient, no icon */}
+          <Link
+            href="/"
+            className="text-[17px] font-medium text-[hsl(var(--fg-primary))] tracking-tight transition-colors duration-150 hover:text-[hsl(var(--fg-secondary))]"
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
-      </div>
+            riff.fm
+          </Link>
 
-      {/* Mobile nav */}
-      {mobileOpen && (
-        <div className="border-t border-white/10 bg-gray-950 md:hidden">
-          <nav className="flex flex-col p-4">
-            {navLinks.map(({ href, label, icon: Icon }) => (
+          {/* Desktop nav — centered */}
+          <nav className="hidden items-center gap-1 md:flex">
+            {navLinks.map(({ href, label }) => {
+              const active =
+                pathname === href ||
+                (href !== "/" && pathname.startsWith(href));
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "relative px-3 py-2 text-[13px] font-medium transition-colors duration-150",
+                    active
+                      ? "text-[hsl(var(--fg-primary))]"
+                      : "text-[hsl(var(--fg-muted))] hover:text-[hsl(var(--fg-secondary))]",
+                  )}
+                >
+                  {label}
+                  {active && (
+                    <span className="absolute bottom-0 left-3 right-3 h-px bg-[hsl(var(--accent))]" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right side — auth */}
+          <div className="flex items-center gap-3">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="relative h-8 w-8 rounded-full overflow-hidden transition-opacity duration-150 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--bg-base))]">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.image} alt={user.name} />
+                      <AvatarFallback className="bg-[hsl(var(--bg-elevated))] text-[11px] font-medium text-[hsl(var(--fg-muted))]">
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                          .slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48" align="end">
+                  <div className="px-3 py-2">
+                    <p className="text-sm font-medium text-[hsl(var(--fg-primary))]">
+                      {user.name}
+                    </p>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/dashboard/settings"
+                      className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))]"
+                    >
+                      <Settings className="h-3.5 w-3.5" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))]"
+                    >
+                      <User className="h-3.5 w-3.5" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))] cursor-pointer"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
               <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                  pathname === href
-                    ? "bg-white/10 text-white"
-                    : "text-gray-400 hover:bg-white/5 hover:text-white"
-                )}
+                href="/auth/signin"
+                className="inline-flex h-8 items-center justify-center rounded-[var(--radius-sm)] bg-[hsl(var(--accent))] px-4 text-[13px] font-medium text-[hsl(var(--accent-fg))] transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
               >
-                <Icon className="h-4 w-4" />
-                {label}
+                Sign in
               </Link>
-            ))}
+            )}
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[hsl(var(--fg-muted))] transition-colors duration-150 hover:text-[hsl(var(--fg-primary))] md:hidden"
+              aria-label="Toggle menu"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              >
+                {mobileOpen ? (
+                  <>
+                    <line x1="4" y1="4" x2="14" y2="14" />
+                    <line x1="14" y1="4" x2="4" y2="14" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="3" y1="5.5" x2="15" y2="5.5" />
+                    <line x1="3" y1="9" x2="15" y2="9" />
+                    <line x1="3" y1="12.5" x2="15" y2="12.5" />
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile menu slide-in */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-[hsl(var(--bg-overlay)/0.8)] backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+
+          {/* Panel */}
+          <nav className="absolute top-14 right-0 w-full max-w-sm bg-[hsl(var(--bg-surface))] border-b border-[hsl(var(--border-default))] p-6 shadow-[var(--shadow-lg)]">
+            <div className="flex flex-col gap-1">
+              {navLinks.map(({ href, label }) => {
+                const active =
+                  pathname === href ||
+                  (href !== "/" && pathname.startsWith(href));
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "rounded-[var(--radius-sm)] px-4 py-3 text-[15px] font-medium transition-colors duration-150",
+                      active
+                        ? "bg-[hsl(var(--accent-subtle))] text-[hsl(var(--accent))]"
+                        : "text-[hsl(var(--fg-secondary))] hover:bg-[hsl(var(--bg-hover))] hover:text-[hsl(var(--fg-primary))]",
+                    )}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+
+              {!user && (
+                <Link
+                  href="/auth/signin"
+                  onClick={() => setMobileOpen(false)}
+                  className="mt-3 inline-flex h-12 items-center justify-center rounded-[var(--radius-md)] bg-[hsl(var(--accent))] px-6 text-[15px] font-medium text-[hsl(var(--accent-fg))] transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
+                >
+                  Sign in
+                </Link>
+              )}
+            </div>
           </nav>
         </div>
       )}
-    </header>
+    </>
   );
 }

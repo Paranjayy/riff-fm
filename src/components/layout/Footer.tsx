@@ -1,33 +1,33 @@
 import React from "react";
 import Link from "next/link";
-import { Music } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-gray-950">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <footer className="border-t border-[hsl(var(--border-faint))]">
+      <div className="mx-auto max-w-[1200px] px-6 py-8 sm:px-8 lg:px-12">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex items-center gap-2">
-            <Music className="h-5 w-5 text-[#1DB954]" />
-            <span className="bg-gradient-to-r from-[#1DB954] to-emerald-300 bg-clip-text font-bold text-transparent">
-              riff.fm
-            </span>
-          </div>
+          <span className="text-[14px] font-medium text-[hsl(var(--fg-faint))] tracking-tight">
+            riff.fm
+          </span>
 
-          <div className="flex items-center gap-6 text-sm text-gray-400">
-            <Link href="/privacy" className="hover:text-white transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
-              Terms
-            </Link>
-            <Link href="/contact" className="hover:text-white transition-colors">
-              Contact
-            </Link>
-          </div>
+          <nav className="flex items-center gap-6">
+            {[
+              { href: "/privacy", label: "Privacy" },
+              { href: "/terms", label: "Terms" },
+              { href: "/contact", label: "Contact" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[13px] text-[hsl(var(--fg-faint))] transition-colors duration-150 hover:text-[hsl(var(--fg-secondary))] hover:underline hover:underline-offset-4"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
-          <p className="text-sm text-gray-500">
-            Built with ♥ for music lovers
+          <p className="text-[12px] text-[hsl(var(--fg-faint))]">
+            &copy; {new Date().getFullYear()} riff.fm
           </p>
         </div>
       </div>

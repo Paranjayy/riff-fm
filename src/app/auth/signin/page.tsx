@@ -3,43 +3,38 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Music, Github } from "lucide-react";
+import { Github } from "lucide-react";
 
 function SignInContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[128px]" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-md">
-        {/* Logo & heading */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 mb-6">
-            <Music className="w-8 h-8 text-primary" />
-          </div>
-          <h1 className="text-2xl font-bold mb-2">Sign in to riff.fm</h1>
-          <p className="text-muted-foreground text-sm">
-            Connect your accounts to see your media stats.
-          </p>
+    <div className="flex min-h-screen items-center justify-center px-6">
+      <div className="w-full max-w-[380px]">
+        {/* Logo */}
+        <div className="mb-10 text-center">
+          <span className="text-[28px] font-semibold text-[hsl(var(--fg-primary))] tracking-tight">
+            riff.fm
+          </span>
         </div>
 
-        {/* Sign in buttons */}
+        {/* Heading */}
+        <h1 className="text-h2 text-[hsl(var(--fg-primary))] mb-2 text-center">
+          Sign in
+        </h1>
+        <p className="text-[14px] text-[hsl(var(--fg-muted))] mb-10 text-center">
+          Connect your accounts to see your media stats.
+        </p>
+
+        {/* Auth buttons — stacked vertically, full width */}
         <div className="space-y-3">
           {/* Spotify */}
           <button
             onClick={() => signIn("spotify", { callbackUrl })}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1DB954] hover:bg-[#1ed760] text-black font-semibold rounded-lg transition-colors"
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-[var(--radius-md)] bg-[hsl(var(--accent))] px-6 text-[14px] font-medium text-[hsl(var(--accent-fg))] transition-all duration-150 hover:brightness-110 hover:shadow-[var(--shadow-md)] active:scale-[0.98]"
           >
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
             </svg>
             Continue with Spotify
@@ -48,18 +43,18 @@ function SignInContent() {
           {/* GitHub */}
           <button
             onClick={() => signIn("github", { callbackUrl })}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-secondary hover:bg-secondary/80 text-foreground font-semibold rounded-lg border border-border transition-colors"
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-[var(--radius-md)] border border-[hsl(var(--border-default))] bg-[hsl(var(--bg-surface))] px-6 text-[14px] font-medium text-[hsl(var(--fg-primary))] transition-all duration-150 hover:border-[hsl(var(--fg-faint))] hover:bg-[hsl(var(--bg-elevated))] active:scale-[0.98]"
           >
-            <Github className="w-5 h-5" />
+            <Github className="h-5 w-5" />
             Continue with GitHub
           </button>
 
           {/* Google */}
           <button
             onClick={() => signIn("google", { callbackUrl })}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-secondary hover:bg-secondary/80 text-foreground font-semibold rounded-lg border border-border transition-colors"
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-[var(--radius-md)] border border-[hsl(var(--border-default))] bg-[hsl(var(--bg-surface))] px-6 text-[14px] font-medium text-[hsl(var(--fg-primary))] transition-all duration-150 hover:border-[hsl(var(--fg-faint))] hover:bg-[hsl(var(--bg-elevated))] active:scale-[0.98]"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                 fill="#4285F4"
@@ -82,15 +77,21 @@ function SignInContent() {
         </div>
 
         {/* Terms */}
-        <p className="text-center text-xs text-muted-foreground mt-8">
+        <p className="mt-10 text-center text-[12px] text-[hsl(var(--fg-faint))]">
           By signing in, you agree to our{" "}
-          <span className="underline underline-offset-2 cursor-pointer hover:text-foreground transition-colors">
+          <a
+            href="/terms"
+            className="underline underline-offset-2 transition-colors duration-150 hover:text-[hsl(var(--fg-muted))]"
+          >
             Terms
-          </span>{" "}
+          </a>{" "}
           and{" "}
-          <span className="underline underline-offset-2 cursor-pointer hover:text-foreground transition-colors">
+          <a
+            href="/privacy"
+            className="underline underline-offset-2 transition-colors duration-150 hover:text-[hsl(var(--fg-muted))]"
+          >
             Privacy Policy
-          </span>
+          </a>
           .
         </p>
       </div>
@@ -102,8 +103,8 @@ export default function SignInPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="h-5 w-5 rounded-full border-2 border-[hsl(var(--accent))] border-t-transparent animate-spin" />
         </div>
       }
     >

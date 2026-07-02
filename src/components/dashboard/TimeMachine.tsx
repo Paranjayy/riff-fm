@@ -2,34 +2,38 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import type { TimeRange } from "@/types";
 
 interface TimeMachineProps {
-  value: string;
-  onChange: (range: string) => void;
+  value: TimeRange;
+  onChange: (range: TimeRange) => void;
 }
 
-const ranges = [
-  { id: "short_term", label: "Last 4 Weeks" },
-  { id: "medium_term", label: "Last 6 Months" },
-  { id: "long_term", label: "Last Year" },
-  { id: "all_time", label: "All Time" },
+const ranges: { id: TimeRange; label: string }[] = [
+  { id: "short_term", label: "4 weeks" },
+  { id: "medium_term", label: "6 months" },
+  { id: "long_term", label: "1 year" },
+  { id: "all_time", label: "All time" },
 ];
 
 export function TimeMachine({ value, onChange }: TimeMachineProps) {
   return (
-    <div className="inline-flex flex-wrap items-center gap-1 rounded-full bg-gray-900/50 p-1">
+    <div className="flex items-center gap-5">
       {ranges.map(({ id, label }) => (
         <button
           key={id}
           onClick={() => onChange(id)}
           className={cn(
-            "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200",
+            "relative text-[13px] font-medium pb-1 transition-colors ease-out",
             value === id
-              ? "bg-gradient-to-r from-[#1DB954] to-emerald-400 text-black shadow-lg shadow-[#1DB954]/20"
-              : "text-gray-400 hover:text-white"
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground/70",
           )}
         >
           {label}
+          {value === id && (
+            <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary rounded-full" />
+          )}
         </button>
       ))}
     </div>

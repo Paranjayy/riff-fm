@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import type {
@@ -11,142 +11,116 @@ import type {
   ListeningClockData,
   GenreStat,
 } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { StatsOverview as StatsOverviewComponent } from "@/components/dashboard/StatsOverview";
+import { TopList } from "@/components/dashboard/TopList";
+import { ListeningClock } from "@/components/dashboard/ListeningClock";
+import { GenreChart } from "@/components/dashboard/GenreChart";
+import { HeatMap } from "@/components/dashboard/HeatMap";
+import { TimeMachine } from "@/components/dashboard/TimeMachine";
+import { RecentPlays } from "@/components/dashboard/RecentPlays";
 
-// ─── Skeleton components ──────────────────────────────────────────
-function StatCardSkeleton() {
-  return (
-    <div className="p-4 rounded-xl bg-card border border-border animate-pulse">
-      <div className="h-3 w-20 bg-muted rounded mb-2" />
-      <div className="h-8 w-16 bg-muted rounded" />
-    </div>
-  );
-}
+/* ─── Skeleton shapes ──────────────────────────────────────────── */
 
-function ListSkeleton() {
+function StatsSkeleton() {
   return (
-    <div className="space-y-3">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 animate-pulse">
-          <div className="w-10 h-10 rounded bg-muted" />
-          <div className="flex-1">
-            <div className="h-3 w-32 bg-muted rounded mb-1" />
-            <div className="h-2 w-20 bg-muted rounded" />
-          </div>
-          <div className="h-3 w-8 bg-muted rounded" />
+    <div className="flex flex-wrap items-center gap-x-8 gap-y-6">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className="space-y-2"
+          style={{ animationDelay: `${i * 40}ms` }}
+        >
+          <div className="h-10 w-24 skeleton" />
+          <div className="h-3 w-16 skeleton" />
         </div>
       ))}
     </div>
   );
 }
 
-// ─── TimeMachine selector ─────────────────────────────────────────
-const TIME_RANGES: { value: TimeRange; label: string }[] = [
-  { value: "short_term", label: "4 Weeks" },
-  { value: "medium_term", label: "6 Months" },
-  { value: "long_term", label: "1 Year" },
-  { value: "all_time", label: "All Time" },
-];
-
-function TimeMachine({
-  value,
-  onChange,
-}: {
-  value: TimeRange;
-  onChange: (v: TimeRange) => void;
-}) {
+function ListSkeleton({ rows = 5 }: { rows?: number }) {
   return (
-    <div className="flex items-center gap-2 bg-card border border-border rounded-lg p-1">
-      {TIME_RANGES.map((tr) => (
-        <button
-          key={tr.value}
-          onClick={() => onChange(tr.value)}
-          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-            value === tr.value
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-          }`}
+    <div className="space-y-0 divide-y divide-border">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 h-12"
+          style={{ animationDelay: `${i * 40}ms` }}
         >
-          {tr.label}
-        </button>
+          <div className="w-5 h-3 skeleton" />
+          <div className="w-8 h-8 skeleton rounded-full shrink-0" />
+          <div className="flex-1 min-w-0 space-y-1.5">
+            <div className="h-3 w-32 skeleton" />
+            <div className="h-2 w-20 skeleton" />
+          </div>
+          <div className="hidden sm:block h-3 w-12 skeleton" />
+          <div className="hidden sm:block h-3 w-10 skeleton" />
+        </div>
       ))}
     </div>
   );
 }
 
-// ─── Mini stat card ───────────────────────────────────────────────
-function StatCard({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string | number;
-  sub?: string;
-}) {
+function ClockSkeleton() {
   return (
-    <div className="p-4 rounded-xl bg-card border border-border">
-      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-        {label}
-      </p>
-      <p className="text-2xl font-bold">{value}</p>
-      {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}
+    <div className="space-y-3">
+      <div className="h-5 w-32 skeleton" />
+      <div className="space-y-[2px]">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex gap-[2px]"
+            style={{ animationDelay: `${i * 40}ms` }}
+          >
+            <div className="w-10" />
+            {Array.from({ length: 7 }).map((_, j) => (
+              <div key={j} className="h-4 flex-1 skeleton rounded-[2px]" />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-// ─── Top list mini component ──────────────────────────────────────
-function TopListMini({
-  title,
-  items,
-  type,
-}: {
-  title: string;
-  items: StatItem[];
-  type: "artists" | "tracks";
-}) {
+function GenreSkeleton() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No data yet. Import your Spotify history to see your top{" "}
-            {type === "artists" ? "artists" : "songs"}.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {items.slice(0, 5).map((item, idx) => (
-              <div key={item.id} className="flex items-center gap-3">
-                <span className="text-sm text-muted-foreground w-5 text-right tabular-nums">
-                  {idx + 1}
-                </span>
-                {item.image && (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-10 h-10 rounded object-cover"
-                  />
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {item.playCount.toLocaleString()} plays
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <div className="space-y-3">
+      <div className="h-5 w-36 skeleton" />
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-4 h-8"
+          style={{ animationDelay: `${i * 40}ms` }}
+        >
+          <div className="h-3 w-24 skeleton" />
+          <div className="flex-1 h-2 skeleton rounded-full" />
+          <div className="h-3 w-10 skeleton" />
+        </div>
+      ))}
+    </div>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────
+function HeatMapSkeleton() {
+  return (
+    <div className="space-y-3">
+      <div className="h-5 w-24 skeleton" />
+      <div className="flex flex-wrap gap-[2px]">
+        {Array.from({ length: 91 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-3 w-3 skeleton rounded-[2px]"
+            style={{ animationDelay: `${(i % 7) * 20}ms` }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page ─────────────────────────────────────────────────────── */
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -195,41 +169,75 @@ export default function DashboardPage() {
     fetchStats();
   }, [timeRange, status]);
 
+  /* Loading skeleton */
   if (status === "loading" || loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-center py-4">
-          <Loader2 className="w-5 h-5 animate-spin text-primary" />
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="space-y-4">
+          <div className="h-3 w-20 skeleton" />
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div className="h-10 w-64 skeleton" />
+            <div className="h-8 w-64 skeleton" />
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <StatCardSkeleton key={i} />
+
+        {/* Stats */}
+        <div className="pt-8 border-t border-border">
+          <StatsSkeleton />
+        </div>
+
+        {/* Two columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 pt-8 border-t border-border">
+          <div className="space-y-8">
+            <ListSkeleton />
+            <ClockSkeleton />
+          </div>
+          <div className="space-y-8">
+            <ListSkeleton />
+            <GenreSkeleton />
+          </div>
+        </div>
+
+        {/* Heatmap */}
+        <div className="pt-8 border-t border-border">
+          <HeatMapSkeleton />
+        </div>
+
+        {/* Recent plays */}
+        <div className="pt-8 border-t border-border">
+          <div className="h-5 w-28 skeleton mb-4" />
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 h-12"
+              style={{ animationDelay: `${i * 40}ms` }}
+            >
+              <div className="w-10 h-10 skeleton rounded-md shrink-0" />
+              <div className="flex-1 min-w-0 space-y-1.5">
+                <div className="h-3 w-36 skeleton" />
+                <div className="h-2.5 w-24 skeleton" />
+              </div>
+              <div className="h-3 w-10 skeleton" />
+            </div>
           ))}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="p-6">
-            <ListSkeleton />
-          </Card>
-          <Card className="p-6">
-            <ListSkeleton />
-          </Card>
         </div>
       </div>
     );
   }
 
+  /* Empty state */
   if (!stats) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="text-5xl mb-4">🎵</div>
-        <h2 className="text-xl font-bold mb-2">No data yet</h2>
-        <p className="text-muted-foreground max-w-md mb-6">
-          Connect your Spotify account and import your listening history to
-          see your stats here.
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <h2 className="text-h2 text-foreground mb-3">No data yet</h2>
+        <p className="text-body text-muted-foreground max-w-md mb-8">
+          Connect your Spotify account and import your listening history to see
+          your stats here.
         </p>
         <button
           onClick={() => router.push("/dashboard/settings")}
-          className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg text-[14px] font-medium hover:bg-primary/90 transition-colors ease-out"
         >
           Go to Settings
         </button>
@@ -238,128 +246,59 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">
-            Welcome back, {session?.user?.name?.split(" ")[0] || "there"}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Here&apos;s your listening overview
-          </p>
+    <div className="space-y-8">
+      {/* Welcome header + time range */}
+      <div>
+        <p className="text-label text-muted-foreground mb-2">Overview</p>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-h1 text-foreground">
+              Welcome back, {session?.user?.name?.split(" ")[0] || "there"}
+            </h1>
+          </div>
+          <TimeMachine value={timeRange} onChange={setTimeRange} />
         </div>
-        <TimeMachine value={timeRange} onChange={setTimeRange} />
       </div>
 
-      {/* Stats overview grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard
-          label="Total Plays"
-          value={stats.totalPlays.toLocaleString()}
-        />
-        <StatCard
-          label="Hours Listened"
-          value={Math.round(stats.totalHours).toLocaleString()}
-          sub={`${Math.round(stats.totalDays)} days`}
-        />
-        <StatCard
-          label="Unique Artists"
-          value={stats.uniqueArtists.toLocaleString()}
-        />
-        <StatCard
-          label="Unique Tracks"
-          value={stats.uniqueTracks.toLocaleString()}
-        />
-        <StatCard
-          label="Top Genre"
-          value={stats.topGenre || "N/A"}
-        />
-        <StatCard
-          label="Skip Rate"
-          value={`${Math.round(stats.skipRate)}%`}
-        />
-        <StatCard
-          label="Most Active Hour"
-          value={`${stats.mostActiveHour}:00`}
-        />
-        <StatCard
-          label="Avg Plays/Day"
-          value={stats.avgPlaysPerDay.toFixed(1)}
-        />
+      {/* Stats metrics row */}
+      <div className="border-t border-border pt-8">
+        <StatsOverviewComponent stats={stats} />
       </div>
 
-      {/* Top Artists + Top Songs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TopListMini title="Top Artists" items={topArtists} type="artists" />
-        <TopListMini title="Top Songs" items={topTracks} type="tracks" />
+      {/* Two columns: 65/35 — left: artists + clock, right: songs + genres */}
+      <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 border-t border-border pt-8">
+        <div className="space-y-8">
+          <TopList
+            title="Top Artists"
+            items={topArtists}
+            type="artists"
+            maxItems={5}
+          />
+          <ListeningClock data={clockData} />
+        </div>
+        <div className="space-y-8">
+          <TopList
+            title="Top Songs"
+            items={topTracks}
+            type="tracks"
+            maxItems={5}
+          />
+          {genres.length > 0 && <GenreChart data={genres} />}
+        </div>
       </div>
 
-      {/* Genre chart */}
-      {genres.length > 0 && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Genre Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {genres.slice(0, 8).map((g) => (
-                <div key={g.genre}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm">{g.genre}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {Math.round(g.percentage)}%
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all duration-500"
-                      style={{ width: `${g.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Heatmap — full width */}
+      {heatMap.length > 0 && (
+        <div className="border-t border-border pt-8">
+          <HeatMap data={heatMap} />
+        </div>
       )}
 
-      {/* Recent plays */}
+      {/* Recent plays — clean list */}
       {recentPlays.length > 0 && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Recent Plays</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recentPlays.slice(0, 10).map((play: any, idx: number) => (
-                <div
-                  key={play.id || idx}
-                  className="flex items-center gap-3"
-                >
-                  {play.track?.album?.image && (
-                    <img
-                      src={play.track.album.image}
-                      alt=""
-                      className="w-10 h-10 rounded object-cover"
-                    />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {play.track?.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {play.track?.artist?.name}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {new Date(play.playedAt).toLocaleDateString()}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="border-t border-border pt-8">
+          <RecentPlays plays={recentPlays} />
+        </div>
       )}
     </div>
   );

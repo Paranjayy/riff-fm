@@ -18,49 +18,47 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 function getIntensityClass(plays: number, maxPlays: number): string {
-  if (plays === 0) return "bg-gray-800/50";
+  if (plays === 0) return "bg-muted";
   const ratio = plays / maxPlays;
-  if (ratio <= 0.2) return "bg-purple-900/60";
-  if (ratio <= 0.4) return "bg-purple-700/60";
-  if (ratio <= 0.6) return "bg-emerald-800/60";
-  if (ratio <= 0.8) return "bg-emerald-600/70";
-  return "bg-[#1DB954]/80";
+  if (ratio <= 0.15) return "bg-primary/15";
+  if (ratio <= 0.35) return "bg-primary/30";
+  if (ratio <= 0.55) return "bg-primary/50";
+  if (ratio <= 0.75) return "bg-primary/70";
+  return "bg-primary";
 }
 
 function formatHour(hour: number): string {
-  if (hour === 0) return "12 AM";
-  if (hour === 12) return "12 PM";
-  return hour < 12 ? `${hour} AM` : `${hour - 12} PM`;
+  if (hour === 0) return "12a";
+  if (hour === 12) return "12p";
+  return hour < 12 ? `${hour}a` : `${hour - 12}p`;
 }
 
 export function ListeningClock({ data }: ListeningClockProps) {
   const { grid, maxPlays } = useMemo(() => {
     const map = new Map<string, number>();
     let max = 0;
-
     for (const entry of data) {
       const key = `${entry.hour}-${entry.day}`;
       map.set(key, entry.plays);
       if (entry.plays > max) max = entry.plays;
     }
-
     return { grid: map, maxPlays: max };
   }, [data]);
 
   return (
-    <div className="rounded-xl border border-white/5 bg-gray-900/50 p-4 sm:p-6">
-      <h3 className="mb-4 text-lg font-semibold">Listening Clock</h3>
+    <div>
+      <h3 className="text-h3 text-foreground mb-4">Listening clock</h3>
 
       <TooltipProvider delayDuration={0}>
-        <div className="overflow-x-auto">
-          <div className="inline-flex min-w-[600px] flex-col gap-0.5">
-            {/* Day labels header */}
-            <div className="mb-1 flex items-center">
-              <div className="w-12" /> {/* spacer for hour labels */}
+        <div className="overflow-x-auto -mx-1 px-1">
+          <div className="inline-flex min-w-[480px] flex-col gap-[2px]">
+            {/* Day labels — top */}
+            <div className="flex items-center mb-1">
+              <div className="w-10 shrink-0" />
               {DAYS.map((day) => (
                 <div
                   key={day}
-                  className="flex-1 text-center text-xs font-medium text-gray-500"
+                  className="flex-1 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-wider"
                 >
                   {day}
                 </div>
@@ -69,13 +67,10 @@ export function ListeningClock({ data }: ListeningClockProps) {
 
             {/* Hour rows */}
             {HOURS.map((hour) => (
-              <div key={hour} className="flex items-center gap-0.5">
-                {/* Hour label */}
-                <div className="w-12 text-right pr-2 text-xs text-gray-500">
-                  {hour % 3 === 0 ? formatHour(hour) : ""}
+              <div key={hour} className="flex items-center gap-[2px]">
+                <div className="w-10 shrink-0 text-right pr-2 text-[10px] text-muted-foreground tabular-nums">
+                  {hour % 4 === 0 ? formatHour(hour) : ""}
                 </div>
-
-                {/* Day cells */}
                 {DAYS.map((day) => {
                   const plays = grid.get(`${hour}-${day}`) || 0;
                   return (
@@ -83,13 +78,14 @@ export function ListeningClock({ data }: ListeningClockProps) {
                       <TooltipTrigger asChild>
                         <button
                           className={cn(
-                            "h-5 flex-1 rounded-sm transition-transform hover:scale-150 hover:z-10",
-                            getIntensityClass(plays, maxPlays)
+                            "h-4 flex-1 rounded-[2px] transition-opacity ease-out hover:opacity-80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+                            getIntensityClass(plays, maxPlays),
                           )}
+                          aria-label={`${plays} plays on ${day} at ${formatHour(hour)}`}
                         />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p className="text-xs">
+                        <p className="text-[11px]">
                           <span className="font-medium">{plays}</span> plays
                           <br />
                           {day} at {formatHour(hour)}
@@ -104,23 +100,28 @@ export function ListeningClock({ data }: ListeningClockProps) {
         </div>
       </TooltipProvider>
 
-      {/* Legend */}
-      <div className="mt-4 flex items-center justify-end gap-2">
-        <span className="text-xs text-gray-500">Less</span>
-        {[0, 1, 2, 3, 4].map((level) => (
-          <div
-            key={level}
-            className={cn(
-              "h-3 w-3 rounded-sm",
-              level === 0 && "bg-gray-800/50",
-              level === 1 && "bg-purple-900/60",
-              level === 2 && "bg-purple-700/60",
-              level === 3 && "bg-emerald-600/70",
-              level === 4 && "bg-[#1DB954]/80"
-            )}
-          />
-        ))}
-        <span className="text-xs text-gray-500">More</span>
+      {/* Legend + caption */}
+      <div className="mt-3 flex items-center justify-between">
+        <p className="text-[11px] text-muted-foreground/70">
+          When you listen to music by hour and day
+        </p>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-muted-foreground/70">Less</span>
+          {[0, 1, 2, 3, 4].map((level) => (
+            <div
+              key={level}
+              className={cn(
+                "h-2 w-2 rounded-[1px]",
+                level === 0 && "bg-muted",
+                level === 1 && "bg-primary/15",
+                level === 2 && "bg-primary/30",
+                level === 3 && "bg-primary/50",
+                level === 4 && "bg-primary/80",
+              )}
+            />
+          ))}
+          <span className="text-[10px] text-muted-foreground/70">More</span>
+        </div>
       </div>
     </div>
   );
