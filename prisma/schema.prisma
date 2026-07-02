@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth ───────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  username      String?   @unique
+  bio           String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // OAuth providers
+  spotifyId   String? @unique
+  githubId    String? @unique
+  googleId    String? @unique
+  spotifyData Json?   // Cached Spotify profile
+
+  // Relations
+  accounts            Account[]
+  sessions            Session[]
+  listeningHistory    ListeningHistory[]
+  privacySettings     PrivacySettings?
+  sentFriendRequests  Friend[] @relation("sentFriends")
+  receivedFriendRequests Friend[] @relation("receivedFriends")
+  importedData        ImportedData[]
+  customLists         CustomList[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Spotify Data ──────────────────────────────────────────────────
+
+model Artist {
+  id         String @id @default(cuid())
+  spotifyId  String @unique
+  name       String
+  image      String?
+  genres     String // JSON array as string for querying
+  popularity Int?
+  followers  Int?
+  url        String?
+
+  tracks     Track[]
+  albums     Album[]
+  history    ListeningHistory[]
+}
+
+model Album {
+  id          String   @id @default(cuid())
+  spotifyId   String   @unique
+  name        String
+  image       String?
+  releaseDate DateTime?
+  totalTracks Int?
+  url         String?
+
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id])
+  tracks   Track[]
+  history  ListeningHistory[]
+}
+
+model Track {
+  id         String  @id @default(cuid())
+  spotifyId  String  @unique
+  name       String
+  durationMs Int?
+  previewUrl String?
+  url        String?
+  explicit   Boolean @default(false)
+
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id])
+  albumId  String
+  album    Album  @relation(fields: [albumId], references: [id])
+  history  ListeningHistory[]
+}
+
+// ─── Listening History ─────────────────────────────────────────────
+
+model ListeningHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  trackId   String
+  artistId  String
+  albumId   String
+  playedAt  DateTime
+  msPlayed  Int
+  platform  String?
+  country   String?
+  shuffle   Boolean  @default(false)
+  skipped   Boolean  @default(false)
+  reasonStart String?
+  reasonEnd   String?
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track   Track  @relation(fields: [trackId], references: [id])
+  artist  Artist @relation(fields: [artistId], references: [id])
+  album   Album  @relation(fields: [albumId], references: [id])
+
+  @@index([userId, playedAt])
+  @@index([userId, artistId])
+  @@index([userId, trackId])
+  @@index([userId, albumId])
+}
+
+// ─── Social ────────────────────────────────────────────────────────
+
+model Friend {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     FriendStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  sender   User @relation("sentFriends", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("receivedFriends", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+// ─── Privacy ───────────────────────────────────────────────────────
+
+model PrivacySettings {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  publicProfile Boolean @default(true)
+  showListening Boolean @default(true)
+  showStats     Boolean @default(true)
+  showTopLists  Boolean @default(true)
+  showFriends   Boolean @default(true)
+  showHistory   Boolean @default(false)
+  showGenres    Boolean @default(true)
+  showHours     Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Import ────────────────────────────────────────────────────────
+
+model ImportedData {
+  id        String   @id @default(cuid())
+  userId    String
+  source    String   // "spotify_upload", "lastfm", "statsfm"
+  filename  String?
+  status    ImportStatus @default(PENDING)
+  recordsCount Int?
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+  error     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+// ─── Custom Lists (for future features) ───────────────────────────
+
+model CustomList {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  type        String   // "movies", "books", "games", "youtube", "mixed"
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ListItem[]
+
+  @@index([userId])
+}
+
+model ListItem {
+  id         String  @id @default(cuid())
+  listId     String
+  externalId String? // ID from external API (TMDB, OpenLibrary, etc.)
+  title      String
+  subtitle   String?
+  image      String?
+  url        String?
+  rating     Int?    // 1-10
+  notes      String?
+  position   Int     @default(0)
+  createdAt  DateTime @default(now())
+
+  list CustomList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@index([listId])
+}
