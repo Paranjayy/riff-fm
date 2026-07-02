@@ -4,7 +4,16 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Save, Download, Trash2, Shield } from "lucide-react";
+import Link from "next/link";
+import {
+  Loader2,
+  Save,
+  Download,
+  Trash2,
+  Shield,
+  Upload,
+  AlertTriangle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface Profile {
@@ -116,16 +125,49 @@ export default function SettingsPage() {
     }
   }
 
-  const privacyOptions: { key: keyof Privacy; label: string; desc: string }[] = [
-    { key: "publicProfile", label: "Public Profile", desc: "Allow others to view your profile" },
-    { key: "showListening", label: "Show Listening", desc: "Display current listening activity" },
-    { key: "showStats", label: "Show Stats", desc: "Display your listening statistics" },
-    { key: "showTopLists", label: "Show Top Lists", desc: "Display top artists, songs, albums" },
-    { key: "showFriends", label: "Show Friends", desc: "Display your friends list" },
-    { key: "showHistory", label: "Show History", desc: "Display recent listening history" },
-    { key: "showGenres", label: "Show Genres", desc: "Display genre breakdowns" },
-    { key: "showHours", label: "Show Hours", desc: "Display listening hours and patterns" },
-  ];
+  const privacyOptions: { key: keyof Privacy; label: string; desc: string }[] =
+    [
+      {
+        key: "publicProfile",
+        label: "Public Profile",
+        desc: "Allow others to view your profile",
+      },
+      {
+        key: "showListening",
+        label: "Show Listening",
+        desc: "Display current listening activity",
+      },
+      {
+        key: "showStats",
+        label: "Show Stats",
+        desc: "Display your listening statistics",
+      },
+      {
+        key: "showTopLists",
+        label: "Show Top Lists",
+        desc: "Display top artists, songs, albums",
+      },
+      {
+        key: "showFriends",
+        label: "Show Friends",
+        desc: "Display your friends list",
+      },
+      {
+        key: "showHistory",
+        label: "Show History",
+        desc: "Display recent listening history",
+      },
+      {
+        key: "showGenres",
+        label: "Show Genres",
+        desc: "Display genre breakdowns",
+      },
+      {
+        key: "showHours",
+        label: "Show Hours",
+        desc: "Display listening hours and patterns",
+      },
+    ];
 
   if (loading) {
     return (
@@ -292,15 +334,102 @@ export default function SettingsPage() {
       {/* Data Management */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Data Management</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Data Management
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <button className="flex items-center gap-2 w-full px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm text-foreground hover:bg-secondary/80 transition-colors">
+          <Link
+            href="/dashboard/upload"
+            className="flex items-center gap-2 w-full px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm text-foreground hover:bg-secondary/80 transition-colors"
+          >
+            <Upload className="w-4 h-4" />
+            Import Streaming History
+          </Link>
+          <button
+            onClick={async () => {
+              try {
+                const link = document.createElement("a");
+                link.href = "/api/user/export";
+                link.download = "riff-fm-export.json";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                toast.success("Export started — download will begin shortly");
+              } catch {
+                toast.error("Failed to export data");
+              }
+            }}
+            className="flex items-center gap-2 w-full px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm text-foreground hover:bg-secondary/80 transition-colors"
+          >
             <Download className="w-4 h-4" />
-            Export My Data
+            Export All Data
           </button>
-          <button className="flex items-center gap-2 w-full px-4 py-2.5 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive hover:bg-destructive/20 transition-colors">
+          <button
+            onClick={async () => {
+              if (
+                !window.confirm(
+                  "Are you sure you want to delete ALL your listening history? This cannot be undone.",
+                )
+              ) {
+                return;
+              }
+              try {
+                const res = await fetch("/api/user/profile", {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ deleteListeningHistory: true }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                  toast.success("Listening history deleted");
+                } else {
+                  toast.error(data.error || "Failed to delete history");
+                }
+              } catch {
+                toast.error("Something went wrong");
+              }
+            }}
+            className="flex items-center gap-2 w-full px-4 py-2.5 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive hover:bg-destructive/20 transition-colors"
+          >
             <Trash2 className="w-4 h-4" />
+            Delete All Listening History
+          </button>
+          <button
+            onClick={async () => {
+              if (
+                !window.confirm(
+                  "Are you SURE you want to delete your account? This will permanently delete all your data and cannot be undone.",
+                )
+              ) {
+                return;
+              }
+              if (
+                !window.confirm(
+                  "Final confirmation: Your account, listening history, and all associated data will be permanently deleted.",
+                )
+              ) {
+                return;
+              }
+              try {
+                const res = await fetch("/api/user/profile", {
+                  method: "DELETE",
+                });
+                const data = await res.json();
+                if (data.success) {
+                  toast.success("Account deleted");
+                  window.location.href = "/";
+                } else {
+                  toast.error(data.error || "Failed to delete account");
+                }
+              } catch {
+                toast.error("Something went wrong");
+              }
+            }}
+            className="flex items-center gap-2 w-full px-4 py-2.5 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive hover:bg-destructive/20 transition-colors"
+          >
+            <AlertTriangle className="w-4 h-4" />
             Delete Account
           </button>
         </CardContent>

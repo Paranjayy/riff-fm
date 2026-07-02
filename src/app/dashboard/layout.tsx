@@ -13,6 +13,8 @@ import {
   Users,
   Settings,
   LogOut,
+  Upload,
+  Download,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -25,6 +27,8 @@ const NAV_ITEMS = [
   { href: "/dashboard/timeline", label: "Timeline", icon: Clock },
   { href: "/dashboard/friends", label: "Friends", icon: Users },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard/upload", label: "Upload", icon: Upload },
+  { href: "/dashboard/export", label: "Export", icon: Download },
 ] as const;
 
 export default function DashboardLayout({
@@ -64,7 +68,7 @@ export default function DashboardLayout({
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   active
                     ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary",
                 )}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -88,9 +92,7 @@ export default function DashboardLayout({
 
       {/* ─── Main Content ─────────────────────────────────────── */}
       <div className="flex-1 min-w-0 pb-20 lg:pb-0">
-        <main className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
-          {children}
-        </main>
+        <main className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">{children}</main>
       </div>
 
       {/* ─── Mobile Bottom Nav ────────────────────────────────── */}
@@ -107,7 +109,7 @@ export default function DashboardLayout({
                   "flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-colors min-w-0",
                   active
                     ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <Icon className="w-5 h-5" />
