@@ -54,7 +54,7 @@ export default function SearchPage() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("all");
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceTimer = useRef<ReturnType<typeof setTimeout>>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/signin");
@@ -94,9 +94,10 @@ export default function SearchPage() {
     async function search() {
       setLoading(true);
       try {
-        const typeParam = activeTab === "all" ? "artists,tracks,albums" : activeTab;
+        const typeParam =
+          activeTab === "all" ? "artists,tracks,albums" : activeTab;
         const res = await fetch(
-          `/api/spotify/search?q=${encodeURIComponent(debouncedQuery)}&type=${typeParam}`
+          `/api/spotify/search?q=${encodeURIComponent(debouncedQuery)}&type=${typeParam}`,
         );
         if (res.ok && !cancelled) {
           const data = await res.json();
@@ -122,7 +123,7 @@ export default function SearchPage() {
     setRecentSearches((prev) => {
       const updated = [term, ...prev.filter((s) => s !== term)].slice(
         0,
-        MAX_RECENT
+        MAX_RECENT,
       );
       try {
         localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
@@ -352,7 +353,9 @@ export default function SearchPage() {
       {loading && debouncedQuery.trim() && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-5 h-5 animate-spin text-primary" />
-          <span className="ml-2 text-sm text-muted-foreground">Searching...</span>
+          <span className="ml-2 text-sm text-muted-foreground">
+            Searching...
+          </span>
         </div>
       )}
 
@@ -390,12 +393,14 @@ export default function SearchPage() {
             {allResults.length === 0 ? (
               <EmptyState query={debouncedQuery} />
             ) : (
-              <div className="space-y-2">{allResults.map(renderResultCard)}</div>
+              <div className="space-y-2">
+                {allResults.map(renderResultCard)}
+              </div>
             )}
           </TabsContent>
 
           <TabsContent value="artists">
-            {(!results.artists || results.artists.length === 0) ? (
+            {!results.artists || results.artists.length === 0 ? (
               <EmptyState query={debouncedQuery} type="artists" />
             ) : (
               <div className="space-y-2">
@@ -405,7 +410,7 @@ export default function SearchPage() {
           </TabsContent>
 
           <TabsContent value="tracks">
-            {(!results.tracks || results.tracks.length === 0) ? (
+            {!results.tracks || results.tracks.length === 0 ? (
               <EmptyState query={debouncedQuery} type="tracks" />
             ) : (
               <div className="space-y-2">
@@ -415,7 +420,7 @@ export default function SearchPage() {
           </TabsContent>
 
           <TabsContent value="albums">
-            {(!results.albums || results.albums.length === 0) ? (
+            {!results.albums || results.albums.length === 0 ? (
               <EmptyState query={debouncedQuery} type="albums" />
             ) : (
               <div className="space-y-2">
@@ -444,13 +449,7 @@ export default function SearchPage() {
   );
 }
 
-function EmptyState({
-  query,
-  type,
-}: {
-  query: string;
-  type?: string;
-}) {
+function EmptyState({ query, type }: { query: string; type?: string }) {
   return (
     <div className="py-12 text-center">
       <Search className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
