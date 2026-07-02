@@ -12,7 +12,7 @@ export async function generateMetadata({
 }: ProfilePageProps): Promise<Metadata> {
   const user = await db.user.findUnique({
     where: { username: params.username },
-    select: { name: true, bio: true },
+    select: { name: true, bio: true, username: true },
   });
   if (!user) return { title: "User Not Found - riff.fm" };
   return {
@@ -33,7 +33,11 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
       createdAt: true,
       privacySettings: true,
       _count: {
-        select: { listeningHistory: true, sentFriendRequests: true, receivedFriendRequests: true },
+        select: {
+          listeningHistory: true,
+          sentFriendRequests: true,
+          receivedFriendRequests: true,
+        },
       },
     },
   });
@@ -142,13 +146,15 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-bold">{user.name || user.username}</h1>
+              <h1 className="text-2xl font-bold">
+                {user.name || user.username}
+              </h1>
               {user.username && (
-                <p className="text-muted-foreground text-sm">@{user.username}</p>
+                <p className="text-muted-foreground text-sm">
+                  @{user.username}
+                </p>
               )}
-              {user.bio && (
-                <p className="text-sm mt-1 max-w-md">{user.bio}</p>
-              )}
+              {user.bio && <p className="text-sm mt-1 max-w-md">{user.bio}</p>}
               <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
                 <span>{totalPlays.toLocaleString()} plays</span>
                 <span>{uniqueArtists.length} artists</span>
@@ -161,77 +167,85 @@ export default async function PublicProfilePage({ params }: ProfilePageProps) {
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
         {/* Top Artists */}
-        {(user.privacySettings?.showTopLists ?? true) && topArtistsList.length > 0 && (
-          <section>
-            <h2 className="text-lg font-semibold mb-4">Top Artists</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-              {topArtistsList.map((artist) => (
-                <div
-                  key={artist.rank}
-                  className="rounded-xl bg-card border border-border p-3"
-                >
-                  <div className="aspect-square rounded-lg overflow-hidden bg-secondary mb-2">
-                    {artist.image ? (
-                      <img
-                        src={artist.image}
-                        alt={artist.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-2xl text-muted-foreground">
-                        🎤
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">#{artist.rank}</p>
-                  <p className="text-sm font-medium truncate">{artist.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {artist.plays.toLocaleString()} plays
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Top Tracks */}
-        {(user.privacySettings?.showTopLists ?? true) && topTracksList.length > 0 && (
-          <section>
-            <h2 className="text-lg font-semibold mb-4">Top Songs</h2>
-            <div className="space-y-2">
-              {topTracksList.map((track) => (
-                <div
-                  key={track.rank}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border"
-                >
-                  <span className="text-sm text-muted-foreground w-5 text-right tabular-nums">
-                    {track.rank}
-                  </span>
-                  {track.image ? (
-                    <img
-                      src={track.image}
-                      alt=""
-                      className="w-10 h-10 rounded object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded bg-secondary flex items-center justify-center text-muted-foreground text-xs">
-                      🎵
+        {(user.privacySettings?.showTopLists ?? true) &&
+          topArtistsList.length > 0 && (
+            <section>
+              <h2 className="text-lg font-semibold mb-4">Top Artists</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {topArtistsList.map((artist) => (
+                  <div
+                    key={artist.rank}
+                    className="rounded-xl bg-card border border-border p-3"
+                  >
+                    <div className="aspect-square rounded-lg overflow-hidden bg-secondary mb-2">
+                      {artist.image ? (
+                        <img
+                          src={artist.image}
+                          alt={artist.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-2xl text-muted-foreground">
+                          🎤
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{track.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {track.artist}
+                    <p className="text-xs text-muted-foreground">
+                      #{artist.rank}
+                    </p>
+                    <p className="text-sm font-medium truncate">
+                      {artist.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {artist.plays.toLocaleString()} plays
                     </p>
                   </div>
-                  <span className="text-xs text-muted-foreground tabular-nums">
-                    {track.plays.toLocaleString()} plays
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                ))}
+              </div>
+            </section>
+          )}
+
+        {/* Top Tracks */}
+        {(user.privacySettings?.showTopLists ?? true) &&
+          topTracksList.length > 0 && (
+            <section>
+              <h2 className="text-lg font-semibold mb-4">Top Songs</h2>
+              <div className="space-y-2">
+                {topTracksList.map((track) => (
+                  <div
+                    key={track.rank}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border"
+                  >
+                    <span className="text-sm text-muted-foreground w-5 text-right tabular-nums">
+                      {track.rank}
+                    </span>
+                    {track.image ? (
+                      <img
+                        src={track.image}
+                        alt=""
+                        className="w-10 h-10 rounded object-cover"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded bg-secondary flex items-center justify-center text-muted-foreground text-xs">
+                        🎵
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {track.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {track.artist}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground tabular-nums">
+                      {track.plays.toLocaleString()} plays
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
         {/* Member since */}
         <div className="text-center text-xs text-muted-foreground pt-4 border-t border-border">

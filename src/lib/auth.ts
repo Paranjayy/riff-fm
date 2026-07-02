@@ -1,8 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { type DefaultSession } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { Prisma } from "@prisma/client";
 import { db } from "./db";
 import { SPOTIFY_SCOPES } from "./constants";
 
@@ -21,7 +22,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module "next-auth" {
   interface JWT {
     userId?: string;
     spotifyId?: string | null;
@@ -60,7 +61,8 @@ const nextAuth = NextAuth({
             where: { id: user.id },
             data: {
               spotifyId: account.providerAccountId,
-              spotifyData: (profile as Record<string, unknown>) ?? null,
+              spotifyData:
+                (profile as unknown as Prisma.InputJsonValue) ?? null,
             },
           });
         } catch (error) {
@@ -85,7 +87,7 @@ const nextAuth = NextAuth({
       if (!token.spotifyId && token.userId) {
         try {
           const dbUser = await db.user.findUnique({
-            where: { id: token.userId },
+            where: { id: token.userId as string },
             select: { spotifyId: true },
           });
           token.spotifyId = dbUser?.spotifyId ?? null;
