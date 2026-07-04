@@ -33,17 +33,17 @@ export function Navbar({ user }: NavbarProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-[hsl(var(--border-subtle))] bg-[hsl(var(--bg-base)/0.85)] backdrop-blur-xl backdrop-saturate-150">
-        <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6 sm:px-8 lg:px-12">
-          {/* Logo — just text, no gradient, no icon */}
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-xl backdrop-saturate-150">
+        <div className="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-6 sm:px-8">
+          {/* Logo — plain text */}
           <Link
             href="/"
-            className="text-[17px] font-medium text-[hsl(var(--fg-primary))] tracking-tight transition-colors duration-150 hover:text-[hsl(var(--fg-secondary))]"
+            className="text-[16px] font-medium text-foreground tracking-tight"
           >
             riff.fm
           </Link>
 
-          {/* Desktop nav — centered */}
+          {/* Desktop nav */}
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map(({ href, label }) => {
               const active =
@@ -56,13 +56,13 @@ export function Navbar({ user }: NavbarProps) {
                   className={cn(
                     "relative px-3 py-2 text-[13px] font-medium transition-colors duration-150",
                     active
-                      ? "text-[hsl(var(--fg-primary))]"
-                      : "text-[hsl(var(--fg-muted))] hover:text-[hsl(var(--fg-secondary))]",
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {label}
                   {active && (
-                    <span className="absolute bottom-0 left-3 right-3 h-px bg-[hsl(var(--accent))]" />
+                    <span className="absolute bottom-0 left-3 right-3 h-px bg-foreground" />
                   )}
                 </Link>
               );
@@ -74,10 +74,10 @@ export function Navbar({ user }: NavbarProps) {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="relative h-8 w-8 rounded-full overflow-hidden transition-opacity duration-150 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--bg-base))]">
+                  <button className="relative h-8 w-8 rounded-full overflow-hidden transition-opacity duration-150 hover:opacity-80">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.image} alt={user.name} />
-                      <AvatarFallback className="bg-[hsl(var(--bg-elevated))] text-[11px] font-medium text-[hsl(var(--fg-muted))]">
+                      <AvatarFallback className="bg-secondary text-[11px] font-medium text-muted-foreground">
                         {user.name
                           .split(" ")
                           .map((n) => n[0])
@@ -90,7 +90,7 @@ export function Navbar({ user }: NavbarProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48" align="end">
                   <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-[hsl(var(--fg-primary))]">
+                    <p className="text-sm font-medium text-foreground">
                       {user.name}
                     </p>
                   </div>
@@ -98,7 +98,7 @@ export function Navbar({ user }: NavbarProps) {
                   <DropdownMenuItem asChild>
                     <Link
                       href="/dashboard/settings"
-                      className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))]"
+                      className="flex items-center gap-2 text-[13px] text-secondary-foreground"
                     >
                       <Settings className="h-3.5 w-3.5" />
                       Settings
@@ -107,7 +107,7 @@ export function Navbar({ user }: NavbarProps) {
                   <DropdownMenuItem asChild>
                     <Link
                       href="/profile"
-                      className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))]"
+                      className="flex items-center gap-2 text-[13px] text-secondary-foreground"
                     >
                       <User className="h-3.5 w-3.5" />
                       Profile
@@ -116,7 +116,7 @@ export function Navbar({ user }: NavbarProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="flex items-center gap-2 text-[13px] text-[hsl(var(--fg-secondary))] cursor-pointer"
+                    className="flex items-center gap-2 text-[13px] text-secondary-foreground cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5" />
                     Sign out
@@ -126,7 +126,7 @@ export function Navbar({ user }: NavbarProps) {
             ) : (
               <Link
                 href="/auth/signin"
-                className="inline-flex h-8 items-center justify-center rounded-[var(--radius-sm)] bg-[hsl(var(--accent))] px-4 text-[13px] font-medium text-[hsl(var(--accent-fg))] transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
+                className="inline-flex h-8 items-center justify-center rounded-md bg-primary px-4 text-[13px] font-medium text-primary-foreground transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
               >
                 Sign in
               </Link>
@@ -135,7 +135,7 @@ export function Navbar({ user }: NavbarProps) {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[hsl(var(--fg-muted))] transition-colors duration-150 hover:text-[hsl(var(--fg-primary))] md:hidden"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground md:hidden"
               aria-label="Toggle menu"
             >
               <svg
@@ -165,17 +165,17 @@ export function Navbar({ user }: NavbarProps) {
         </div>
       </header>
 
-      {/* Mobile menu slide-in */}
+      {/* Mobile menu */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[hsl(var(--bg-overlay)/0.8)] backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
 
           {/* Panel */}
-          <nav className="absolute top-14 right-0 w-full max-w-sm bg-[hsl(var(--bg-surface))] border-b border-[hsl(var(--border-default))] p-6 shadow-[var(--shadow-lg)]">
+          <nav className="absolute top-14 right-0 w-full max-w-sm border-b border-border bg-background p-6 shadow-lg">
             <div className="flex flex-col gap-1">
               {navLinks.map(({ href, label }) => {
                 const active =
@@ -187,10 +187,10 @@ export function Navbar({ user }: NavbarProps) {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "rounded-[var(--radius-sm)] px-4 py-3 text-[15px] font-medium transition-colors duration-150",
+                      "rounded-md px-4 py-3 text-[15px] font-medium transition-colors duration-150",
                       active
-                        ? "bg-[hsl(var(--accent-subtle))] text-[hsl(var(--accent))]"
-                        : "text-[hsl(var(--fg-secondary))] hover:bg-[hsl(var(--bg-hover))] hover:text-[hsl(var(--fg-primary))]",
+                        ? "text-primary"
+                        : "text-secondary-foreground hover:bg-secondary hover:text-foreground",
                     )}
                   >
                     {label}
@@ -202,7 +202,7 @@ export function Navbar({ user }: NavbarProps) {
                 <Link
                   href="/auth/signin"
                   onClick={() => setMobileOpen(false)}
-                  className="mt-3 inline-flex h-12 items-center justify-center rounded-[var(--radius-md)] bg-[hsl(var(--accent))] px-6 text-[15px] font-medium text-[hsl(var(--accent-fg))] transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
+                  className="mt-3 inline-flex h-12 items-center justify-center rounded-md bg-primary px-6 text-[15px] font-medium text-primary-foreground transition-all duration-150 hover:brightness-110 active:scale-[0.98]"
                 >
                   Sign in
                 </Link>

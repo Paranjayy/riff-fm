@@ -19,106 +19,6 @@ import { HeatMap } from "@/components/dashboard/HeatMap";
 import { TimeMachine } from "@/components/dashboard/TimeMachine";
 import { RecentPlays } from "@/components/dashboard/RecentPlays";
 
-/* ─── Skeleton shapes ──────────────────────────────────────────── */
-
-function StatsSkeleton() {
-  return (
-    <div className="flex flex-wrap items-center gap-x-8 gap-y-6">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div
-          key={i}
-          className="space-y-2"
-          style={{ animationDelay: `${i * 40}ms` }}
-        >
-          <div className="h-10 w-24 skeleton" />
-          <div className="h-3 w-16 skeleton" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ListSkeleton({ rows = 5 }: { rows?: number }) {
-  return (
-    <div className="space-y-0 divide-y divide-border">
-      {Array.from({ length: rows }).map((_, i) => (
-        <div
-          key={i}
-          className="flex items-center gap-3 h-12"
-          style={{ animationDelay: `${i * 40}ms` }}
-        >
-          <div className="w-5 h-3 skeleton" />
-          <div className="w-8 h-8 skeleton rounded-full shrink-0" />
-          <div className="flex-1 min-w-0 space-y-1.5">
-            <div className="h-3 w-32 skeleton" />
-            <div className="h-2 w-20 skeleton" />
-          </div>
-          <div className="hidden sm:block h-3 w-12 skeleton" />
-          <div className="hidden sm:block h-3 w-10 skeleton" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ClockSkeleton() {
-  return (
-    <div className="space-y-3">
-      <div className="h-5 w-32 skeleton" />
-      <div className="space-y-[2px]">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex gap-[2px]"
-            style={{ animationDelay: `${i * 40}ms` }}
-          >
-            <div className="w-10" />
-            {Array.from({ length: 7 }).map((_, j) => (
-              <div key={j} className="h-4 flex-1 skeleton rounded-[2px]" />
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function GenreSkeleton() {
-  return (
-    <div className="space-y-3">
-      <div className="h-5 w-36 skeleton" />
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div
-          key={i}
-          className="flex items-center gap-4 h-8"
-          style={{ animationDelay: `${i * 40}ms` }}
-        >
-          <div className="h-3 w-24 skeleton" />
-          <div className="flex-1 h-2 skeleton rounded-full" />
-          <div className="h-3 w-10 skeleton" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function HeatMapSkeleton() {
-  return (
-    <div className="space-y-3">
-      <div className="h-5 w-24 skeleton" />
-      <div className="flex flex-wrap gap-[2px]">
-        {Array.from({ length: 91 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-3 w-3 skeleton rounded-[2px]"
-            style={{ animationDelay: `${(i % 7) * 20}ms` }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ─── Page ─────────────────────────────────────────────────────── */
 
 export default function DashboardPage() {
@@ -169,59 +69,11 @@ export default function DashboardPage() {
     fetchStats();
   }, [timeRange, status]);
 
-  /* Loading skeleton */
+  /* Loading */
   if (status === "loading" || loading) {
     return (
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="h-3 w-20 skeleton" />
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div className="h-10 w-64 skeleton" />
-            <div className="h-8 w-64 skeleton" />
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="pt-8 border-t border-border">
-          <StatsSkeleton />
-        </div>
-
-        {/* Two columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 pt-8 border-t border-border">
-          <div className="space-y-8">
-            <ListSkeleton />
-            <ClockSkeleton />
-          </div>
-          <div className="space-y-8">
-            <ListSkeleton />
-            <GenreSkeleton />
-          </div>
-        </div>
-
-        {/* Heatmap */}
-        <div className="pt-8 border-t border-border">
-          <HeatMapSkeleton />
-        </div>
-
-        {/* Recent plays */}
-        <div className="pt-8 border-t border-border">
-          <div className="h-5 w-28 skeleton mb-4" />
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-3 h-12"
-              style={{ animationDelay: `${i * 40}ms` }}
-            >
-              <div className="w-10 h-10 skeleton rounded-md shrink-0" />
-              <div className="flex-1 min-w-0 space-y-1.5">
-                <div className="h-3 w-36 skeleton" />
-                <div className="h-2.5 w-24 skeleton" />
-              </div>
-              <div className="h-3 w-10 skeleton" />
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <p className="text-[13px] text-muted-foreground">Loading...</p>
       </div>
     );
   }
@@ -246,28 +98,21 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Welcome header + time range */}
-      <div>
-        <p className="text-label text-muted-foreground mb-2">Overview</p>
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          <div>
-            <h1 className="text-h1 text-foreground">
-              Welcome back, {session?.user?.name?.split(" ")[0] || "there"}
-            </h1>
-          </div>
-          <TimeMachine value={timeRange} onChange={setTimeRange} />
-        </div>
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <h1 className="text-h1 text-foreground">
+          Welcome back, {session?.user?.name?.split(" ")[0] || "there"}
+        </h1>
+        <TimeMachine value={timeRange} onChange={setTimeRange} />
       </div>
 
       {/* Stats metrics row */}
-      <div className="border-t border-border pt-8">
-        <StatsOverviewComponent stats={stats} />
-      </div>
+      <StatsOverviewComponent stats={stats} />
 
       {/* Two columns: 65/35 — left: artists + clock, right: songs + genres */}
-      <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 border-t border-border pt-8">
-        <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-10">
+        <div className="space-y-10">
           <TopList
             title="Top Artists"
             items={topArtists}
@@ -276,7 +121,7 @@ export default function DashboardPage() {
           />
           <ListeningClock data={clockData} />
         </div>
-        <div className="space-y-8">
+        <div className="space-y-10">
           <TopList
             title="Top Songs"
             items={topTracks}
@@ -288,18 +133,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Heatmap — full width */}
-      {heatMap.length > 0 && (
-        <div className="border-t border-border pt-8">
-          <HeatMap data={heatMap} />
-        </div>
-      )}
+      {heatMap.length > 0 && <HeatMap data={heatMap} />}
 
-      {/* Recent plays — clean list */}
-      {recentPlays.length > 0 && (
-        <div className="border-t border-border pt-8">
-          <RecentPlays plays={recentPlays} />
-        </div>
-      )}
+      {/* Recent plays */}
+      {recentPlays.length > 0 && <RecentPlays plays={recentPlays} />}
     </div>
   );
 }

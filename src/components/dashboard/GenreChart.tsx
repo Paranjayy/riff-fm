@@ -14,20 +14,18 @@ export function GenreChart({ data }: GenreChartProps) {
 
   return (
     <div>
-      <h3 className="text-h3 text-foreground mb-6">Genre breakdown</h3>
-
-      <div className="space-y-3">
-        {sorted.map((genre, index) => {
+      <div className="space-y-2.5">
+        {sorted.map((genre) => {
           const barWidth = (genre.plays / maxPlays) * 100;
           return (
-            <div key={genre.genre} className="flex items-center gap-4 h-8">
+            <div key={genre.genre} className="flex items-center gap-3 h-7">
               {/* Genre name */}
-              <span className="text-[13px] text-foreground/60 w-32 shrink-0 truncate">
+              <span className="text-[12px] text-muted-foreground w-28 shrink-0 truncate">
                 {genre.genre}
               </span>
 
               {/* Bar */}
-              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+              <div className="flex-1 h-1.5 bg-transparent rounded-full overflow-hidden">
                 <div
                   className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
                   style={{ width: `${barWidth}%` }}
@@ -35,7 +33,7 @@ export function GenreChart({ data }: GenreChartProps) {
               </div>
 
               {/* Percentage */}
-              <span className="text-[12px] text-muted-foreground tabular-nums w-10 text-right shrink-0">
+              <span className="text-[11px] text-muted-foreground tabular-nums w-8 text-right shrink-0">
                 {Math.round(genre.percentage)}%
               </span>
             </div>

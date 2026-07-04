@@ -1,0 +1,1175 @@
+{
+  "paranjay": {
+    "name": "Paranjay",
+    "total_entries": 79261,
+    "total_plays": 79058,
+    "total_hours": 4028.4,
+    "total_days": 167.85,
+    "unique_artists": 3715,
+    "unique_albums": 7120,
+    "unique_tracks": 11636,
+    "first_play": "2022-07-25",
+    "last_play": "2026-05-08",
+    "days_tracked": 1355,
+    "avg_plays_per_day": 58.3,
+    "avg_hours_per_day": 3.0,
+    "skip_rate": 17.0,
+    "shuffle_rate": 27.7,
+    "longest_streak": 184,
+    "avg_replays": 6.8,
+    "top_artists": [
+      [
+        [
+          "Pritam",
+          12013
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Taylor Swift",
+          5397
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Olivia Rodrigo",
+          3408
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Amit Trivedi",
+          3171
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Arijit Singh",
+          1986
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "A.R. Rahman",
+          1572
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ritviz",
+          1306
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Jasleen Royal",
+          1180
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Anuv Jain",
+          1034
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Alka Yagnik",
+          972
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "OAFF",
+          882
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Shankar-Ehsaan-Loy",
+          814
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sachin-Jigar",
+          812
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Mohit Chauhan",
+          791
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Prateek Kuhad",
+          773
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Aditya Rikhari",
+          773
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Harshavardhan Rameshwar",
+          629
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ezra Furman",
+          625
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Coldplay",
+          623
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Vishal-Shekhar",
+          595
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "top_albums": [
+      [
+        [
+          "Rocky Aur Rani Kii Prem Kahaani",
+          1831
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Tamasha",
+          1276
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "SOUR",
+          1254
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "THE TORTURED POETS DEPARTMENT: THE ANTHOLOGY",
+          1204
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Love Aaj Kal",
+          1170
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "GUTS",
+          1099
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Yeh Jawaani Hai Deewani",
+          1000
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Rockstar",
+          951
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Brahmastra",
+          809
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Dunki",
+          792
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Dear Zindagi (Original Motion Picture Soundtrack)",
+          727
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Mismatched: Season 2 (Soundtrack from the Netflix Series)",
+          715
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "GUTS (spilled)",
+          573
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Songs of Love",
+          560
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "ANIMAL (Original Motion Picture Soundtrack)",
+          542
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Chhichhore",
+          532
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Gehraiyaan",
+          521
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Lover",
+          500
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Atrangi Re",
+          500
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Speak Now (Taylor's Version)",
+          498
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "top_tracks": [
+      [
+        [
+          "Agar Tum Saath Ho",
+          759
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "O Bedardeya (From \"Tu Jhoothi Main Makkaar\")",
+          388
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kalank - Title Track",
+          387
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Mazaak",
+          347
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kal Ki Hi Baat Hai",
+          326
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sang Rahiyo",
+          315
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ve Kamleya (From \"Rocky Aur Rani Kii Prem Kahaani\")",
+          310
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Tere Pyaar Mein",
+          301
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ro Lain De (From \"Rocky Aur Rani Kii Prem Kahaani\")",
+          290
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Gul",
+          281
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Tere Hawaale (From \"Laal Singh Chaddha\")",
+          281
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Rait Zara Si",
+          280
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kabira",
+          261
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Apna Bana Le",
+          248
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Love You Zindagi",
+          221
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kudmayi (Film Version) (From \"Rocky Aur Rani Kii Prem Kahaani\")",
+          217
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kabira (Encore)",
+          213
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Raabta",
+          203
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Kesariya",
+          195
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Nikle The Kabhi Hum Ghar Se",
+          194
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "hours_of_day": {
+      "0": 3867,
+      "1": 4061,
+      "2": 2691,
+      "3": 2152,
+      "4": 2077,
+      "5": 2412,
+      "6": 2384,
+      "7": 2558,
+      "8": 2534,
+      "9": 3391,
+      "10": 4350,
+      "11": 3697,
+      "12": 2931,
+      "13": 2893,
+      "14": 2885,
+      "15": 2513,
+      "16": 2902,
+      "17": 3512,
+      "18": 3447,
+      "19": 3737,
+      "20": 4264,
+      "21": 4695,
+      "22": 4937,
+      "23": 4168
+    },
+    "days_of_week": {
+      "Monday": 11204,
+      "Tuesday": 10478,
+      "Wednesday": 11603,
+      "Thursday": 11788,
+      "Friday": 11217,
+      "Saturday": 11385,
+      "Sunday": 11383
+    },
+    "months": {
+      "April 2023": 1921,
+      "April 2024": 2160,
+      "April 2025": 2203,
+      "April 2026": 1552,
+      "August 2022": 1733,
+      "August 2023": 2070,
+      "August 2024": 1395,
+      "August 2025": 2222,
+      "December 2022": 2229,
+      "December 2023": 1658,
+      "December 2024": 1793,
+      "December 2025": 1605,
+      "February 2023": 1933,
+      "February 2024": 1270,
+      "February 2025": 751,
+      "February 2026": 555,
+      "January 2023": 2850,
+      "January 2024": 1099,
+      "January 2025": 892,
+      "January 2026": 1017,
+      "July 2022": 276,
+      "July 2023": 1627,
+      "July 2024": 1420,
+      "July 2025": 883,
+      "June 2023": 1584,
+      "June 2024": 1261,
+      "June 2025": 1877,
+      "March 2023": 2667,
+      "March 2024": 1589,
+      "March 2025": 1575,
+      "March 2026": 1333,
+      "May 2023": 1833,
+      "May 2024": 2464,
+      "May 2025": 2227,
+      "May 2026": 826,
+      "November 2022": 2545,
+      "November 2023": 1914,
+      "November 2024": 1516,
+      "November 2025": 1467,
+      "October 2022": 2656,
+      "October 2023": 2065,
+      "October 2024": 1616,
+      "October 2025": 1449,
+      "September 2022": 2142,
+      "September 2023": 1688,
+      "September 2024": 1720,
+      "September 2025": 1930
+    },
+    "years": {
+      "2022": 11581,
+      "2023": 23810,
+      "2024": 19303,
+      "2025": 19081,
+      "2026": 5283
+    },
+    "platforms": {
+      "osx": 62510,
+      "windows": 8813,
+      "android": 1687,
+      "OS X 13.0.0 [arm 2]": 1590,
+      "OS X 12.5.0 [arm 2]": 771
+    },
+    "countries": {
+      "IN": 78909,
+      "US": 71,
+      "SG": 63,
+      "GB": 15
+    }
+  },
+  "purvjeet": {
+    "name": "Purvjeet",
+    "total_entries": 2829,
+    "total_plays": 2822,
+    "total_hours": 16.8,
+    "total_days": 0.7,
+    "unique_artists": 683,
+    "unique_albums": 1421,
+    "unique_tracks": 1778,
+    "first_play": "2025-09-08",
+    "last_play": "2026-06-30",
+    "days_tracked": 68,
+    "avg_plays_per_day": 41.5,
+    "avg_hours_per_day": 0.2,
+    "skip_rate": 90.8,
+    "shuffle_rate": 54.0,
+    "longest_streak": 7,
+    "avg_replays": 1.6,
+    "top_artists": [
+      [
+        [
+          "Pritam",
+          215
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Arijit Singh",
+          80
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sachin-Jigar",
+          59
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Vishal-Shekhar",
+          45
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Atif Aslam",
+          40
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Mithoon",
+          39
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Karan Aujla",
+          39
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "AP Dhillon",
+          38
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "A.R. Rahman",
+          35
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Vishal Mishra",
+          28
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Shubh",
+          27
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Shankar-Ehsaan-Loy",
+          26
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Yo Yo Honey Singh",
+          25
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ankit Tiwari",
+          24
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sidhu Moose Wala",
+          24
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Anuv Jain",
+          23
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Halsey",
+          23
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sanam",
+          22
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Diljit Dosanjh",
+          21
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Shaarib Toshi",
+          20
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "top_albums": [
+      [
+        [
+          "Aashiqui 2",
+          29
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Roy",
+          21
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Rockstar",
+          21
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "P-POP CULTURE",
+          16
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Manic",
+          15
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ghalat Fehmi",
+          15
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Yeh Jawaani Hai Deewani",
+          14
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Best of Romance: Atif Aslam",
+          12
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Finding Her",
+          11
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Yaariyan",
+          11
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Desi Boyz",
+          11
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ek Villain",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Dhurandhar",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Murder 2",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Shiddat",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Hate Story 2",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "High On You",
+          9
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Bhaag Milkha Bhaag (Original Motion Picture Soundtrack)",
+          9
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Dhun (From \"Saiyaara\")",
+          8
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Arz Kiya Hai | Coke Studio Bharat",
+          8
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "top_tracks": [
+      [
+        [
+          "Ghalat Fehmi",
+          15
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Tere Liye",
+          12
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Finding Her",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Without Me",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Strawberries & Cigarettes",
+          10
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "High On You",
+          9
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Dhun (From \"Saiyaara\")",
+          8
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Arz Kiya Hai | Coke Studio Bharat",
+          8
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sajde",
+          8
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "STAY (with Justin Bieber)",
+          7
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Udaarian",
+          7
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Apna Bana Le",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Sahiba",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Humsafar",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Hale Dil",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Night Changes",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Tum Se Hi",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "Ishqa Ve",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "4 Aadmi",
+          6
+        ],
+        0,
+        0.0
+      ],
+      [
+        [
+          "LAAVAN",
+          6
+        ],
+        0,
+        0.0
+      ]
+    ],
+    "hours_of_day": {
+      "0": 27,
+      "5": 35,
+      "6": 133,
+      "7": 165,
+      "8": 61,
+      "9": 115,
+      "10": 178,
+      "11": 67,
+      "12": 75,
+      "13": 194,
+      "14": 256,
+      "15": 483,
+      "16": 475,
+      "17": 469,
+      "18": 57,
+      "19": 3,
+      "23": 29
+    },
+    "days_of_week": {
+      "Monday": 1146,
+      "Tuesday": 406,
+      "Thursday": 127,
+      "Wednesday": 347,
+      "Friday": 398,
+      "Saturday": 336,
+      "Sunday": 62
+    },
+    "months": {
+      "April 2026": 467,
+      "December 2025": 18,
+      "February 2026": 99,
+      "January 2026": 134,
+      "June 2026": 711,
+      "March 2026": 595,
+      "May 2026": 668,
+      "October 2025": 126,
+      "September 2025": 4
+    },
+    "years": {
+      "2025": 148,
+      "2026": 2674
+    },
+    "platforms": {
+      "android": 1905,
+      "windows": 902,
+      "unknown": 15
+    },
+    "countries": {
+      "IN": 2822
+    }
+  },
+  "comparison": {
+    "shared_artists": [],
+    "shared_albums": [],
+    "shared_tracks": [],
+    "artist_overlap": 0,
+    "album_overlap": 0,
+    "track_overlap": 0
+  }
+}

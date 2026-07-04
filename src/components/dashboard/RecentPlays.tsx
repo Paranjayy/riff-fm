@@ -39,21 +39,21 @@ export function RecentPlays({ plays }: RecentPlaysProps) {
     <div>
       <h3 className="text-h3 text-foreground mb-4">Recent plays</h3>
 
-      <div className="divide-y divide-border">
+      <div>
         {plays.map((play, i) => (
           <div
             key={play.id || `${play.track?.name}-${play.playedAt}-${i}`}
-            className="flex items-center gap-3 h-12 px-2 -mx-2 rounded-lg hover:bg-secondary transition-colors ease-out"
+            className="flex items-center gap-3 h-10"
           >
             {/* Album art */}
             {play.track?.album?.image ? (
               <img
                 src={play.track.album.image}
                 alt=""
-                className="w-10 h-10 rounded-md object-cover shrink-0"
+                className="w-8 h-8 rounded-md object-cover shrink-0"
               />
             ) : (
-              <div className="w-10 h-10 rounded-md bg-muted shrink-0" />
+              <div className="w-8 h-8 rounded-md bg-muted shrink-0" />
             )}
 
             {/* Track info */}
